@@ -4,12 +4,9 @@
 import PackageDescription
 
 let package = Package(
-    name: "SPMPluginSample",
+    name: "CodeStats",
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "SPMPluginSample",
-            targets: ["SPMPluginSample"]),
+        .plugin(name: "GenerateCodeStats", targets: ["GenerateCodeStats"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -24,5 +21,17 @@ let package = Package(
         .testTarget(
             name: "SPMPluginSampleTests",
             dependencies: ["SPMPluginSample"]),
+        .plugin(
+            name: "GenerateCodeStats",
+            capability: .command(
+                intent: .custom(
+                    verb: "code-stats",
+                    description: "Generates code statistics"
+                ),
+                permissions: [
+                    .writeToPackageDirectory(reason: "Generate code statistics file at root level")
+                ]
+            )
+        )
     ]
 )

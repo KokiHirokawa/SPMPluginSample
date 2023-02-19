@@ -1,6 +1,5 @@
 import Foundation
 import PackagePlugin
-import XcodeProjectPlugin
 
 @main
 struct GenerateCodeStats: CommandPlugin {
@@ -56,6 +55,15 @@ struct GenerateCodeStats: CommandPlugin {
     }
 }
 
+extension GenerateCodeStats {
+    enum Const {
+        fileprivate static let outputFileName = "CodeStats.md"
+    }
+}
+
+#if canImport(XcodeProjectPlugin)
+import XcodeProjectPlugin
+
 extension GenerateCodeStats: XcodeCommandPlugin {
     func performCommand(
         context: XcodeProjectPlugin.XcodePluginContext,
@@ -70,11 +78,8 @@ extension GenerateCodeStats: XcodeCommandPlugin {
             encoding: .utf8
         )
     }
-
-    enum Const {
-        fileprivate static let outputFileName = "CodeStats.md"
-    }
 }
+#endif
 
 final class FileStatsProcessor {
     private(set) var stats = CodeStats()
